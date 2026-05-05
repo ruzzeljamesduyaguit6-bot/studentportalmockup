@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,28 +18,40 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Create an admin user
-        User::factory()->create([
-            'name' => 'Admin User',
-            'email' => 'admin@example.com',
-            'user_type' => 'admin',
-            'user_code' => 'A6969',
-        ]);
+        User::firstOrCreate(
+            ['email' => 'admin@example.com'],
+            [
+                'name' => 'Admin User',
+                'user_type' => 'admin',
+                'user_code' => 'A6969',
+                'email_verified_at' => now(),
+                'password' => Hash::make('password'),
+                'remember_token' => Str::random(10),
+            ]
+        );
 
         // Create a regular user
-        User::factory()->create([
-            'name' => 'Regular User',
-            'email' => 'user@example.com',
-            'user_type' => 'student',
-        ]);
+        User::firstOrCreate(
+            ['email' => 'user@example.com'],
+            [
+                'name' => 'Regular User',
+                'user_type' => 'student',
+                'email_verified_at' => now(),
+                'password' => Hash::make('password'),
+                'remember_token' => Str::random(10),
+            ]
+        );
 
         // Create a professor user
-        User::factory()->create([
-            'name' => 'Juan Dela Cruz',
-            'email' => 'juan.delacruz@example.com',
-            'user_type' => 'professor',
-        ]);
-
-        // Create additional test users
-        User::factory(5)->create();
+        User::firstOrCreate(
+            ['email' => 'juan.delacruz@example.com'],
+            [
+                'name' => 'Juan Dela Cruz',
+                'user_type' => 'professor',
+                'email_verified_at' => now(),
+                'password' => Hash::make('password'),
+                'remember_token' => Str::random(10),
+            ]
+        );
     }
 }
