@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'build_directory' => 'build',
+    'build_directory' => base_path('public/build'),
 
     /*
     |--------------------------------------------------------------------------
@@ -26,6 +26,6 @@ return [
     |
     */
 
-    'manifest_path' => 'public/build/manifest.json',
+    'manifest_path' => base_path('public/build/manifest.json'),
 
 ];
