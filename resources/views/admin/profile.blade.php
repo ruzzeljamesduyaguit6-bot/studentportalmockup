@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="pageTitle">Profile - Student Portal</title>
     <link rel="icon" href="/images/bright-futures-logo.png">
-    @vite(['resources/css/app.css', 'resources/css/views.css', 'resources/js/app.js', 'resources/js/profile-loader.js'])
+    <x-vite-assets :assets="['resources/css/app.css', 'resources/css/views.css', 'resources/js/app.js', 'resources/js/profile-loader.js']" />
 </head>
 <body>
     <div class="navbar" id="navbar">

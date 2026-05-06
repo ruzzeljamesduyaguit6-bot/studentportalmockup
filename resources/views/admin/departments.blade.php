@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Departments - Role Based System</title>
     <link rel="icon" href="/images/bright-futures-logo.png">
-    @vite(['resources/css/app.css', 'resources/css/views.css', 'resources/js/app.js', 'resources/js/catalog-management-loader.js'])
+    <x-vite-assets :assets="['resources/css/app.css', 'resources/css/views.css', 'resources/js/app.js', 'resources/js/catalog-management-loader.js']" />
 </head>
 <body data-catalog-type="departments" data-catalog-label="Department">
     <div class="navbar" id="navbar">
