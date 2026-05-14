@@ -6,6 +6,36 @@
     <title id="pageTitle">Dashboard - Role Based System</title>
     <link rel="icon" href="/images/bright-futures-logo.png">
     <x-vite-assets :assets="['resources/css/app.css', 'resources/css/views.css', 'resources/js/app.js']" />
+    <style>
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#f5f5f5;display:flex;flex-direction:column;min-height:100vh}
+        .navbar{display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:60px;background:#fff;border-bottom:1px solid #e0e0e0;box-shadow:0 2px 4px rgba(0,0,0,.06);position:sticky;top:0;z-index:100}
+        .navbar-title{display:flex;align-items:center;gap:10px;font-size:1.1rem;font-weight:700;color:#333}
+        .navbar-logo{height:36px;width:36px;object-fit:contain}
+        .navbar-actions{display:flex;align-items:center;gap:12px}
+        .user-info{display:flex;align-items:center;gap:8px;font-size:.9rem;color:#555}
+        .user-badge{width:32px;height:32px;border-radius:50%;background:#667eea;color:#fff;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700}
+        .logout-btn{padding:6px 14px;background:#e53e3e;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:.85rem}
+        .page-wrapper{display:flex;flex:1}
+        .sidebar{width:250px;background:linear-gradient(180deg,#f8f9fa 0%,#f0f1f3 100%);border-right:1px solid #ddd;padding:20px 0;overflow-y:auto;display:flex;flex-direction:column}
+        .sidebar-brand{padding:0 20px 20px;font-weight:700;color:#333;font-size:1rem}
+        .nav-item{display:flex;align-items:center;gap:10px;padding:10px 20px;color:#555;text-decoration:none;font-size:.9rem;transition:background .2s}
+        .nav-item:hover,.nav-item.active{background:#e8eaf6;color:#3949ab}
+        .nav-icon{font-size:1.1rem}
+        .main-container{flex:1;padding:24px;overflow-y:auto}
+        .container{max-width:1100px;margin:0 auto}
+        .welcome-card{background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.08);margin-bottom:20px;display:flex;align-items:center;gap:20px}
+        .profile-hero-avatar{width:64px;height:64px;border-radius:50%;background:#667eea;color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:700;flex-shrink:0}
+        .profile-hero-content{flex:1}
+        .profile-hero-greeting{font-size:.8rem;color:#888;text-transform:uppercase;letter-spacing:.05em}
+        .profile-hero-name{font-size:1.4rem;font-weight:700;color:#222;margin:4px 0}
+        .profile-hero-meta{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px}
+        .profile-meta-item{font-size:.8rem;color:#666;background:#f0f0f0;padding:2px 8px;border-radius:12px}
+        .hidden{display:none!important}
+        .user-details-card1,.user-details-card2{background:#fff;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.08);margin-bottom:20px}
+        .user-details-card1 h3,.user-details-card2 h3{font-size:1rem;font-weight:700;margin-bottom:12px;color:#333}
+        .user-details-card1 p,.user-details-card2 p{font-size:.9rem;color:#555;margin-bottom:8px}
+    </style>
 </head>
 <body>
     <div class="navbar" id="navbar">
@@ -422,11 +452,13 @@
             const token = localStorage.getItem('api_token');
             
             if (!token) {
-                console.warn('No token found, redirecting to login');
+                console.warn('[logout] No token found, redirecting to login');
+                localStorage.removeItem('user');
                 window.location.href = '/login';
                 return;
             }
             
+            console.log('[logout] Sending logout request...');
             fetch('/api/auth/logout', {
                 method: 'POST',
                 headers: {
@@ -434,24 +466,17 @@
                     'Authorization': `Bearer ${token}`
                 }
             })
-            .then(response => {
-                console.log('Logout response status:', response.status);
-                return response.json().then(data => {
-                    console.log('Logout response data:', data);
-                    if (response.ok) {
-                        localStorage.removeItem('api_token');
-                        localStorage.removeItem('user');
-                        window.location.href = '/login';
-                    } else {
-                        console.error('Logout failed:', data);
-                        localStorage.removeItem('api_token');
-                        localStorage.removeItem('user');
-                        window.location.href = '/login';
-                    }
-                });
+            .then(async response => {
+                console.log('[logout] Response status:', response.status);
+                let data = {};
+                try { data = await response.json(); } catch (_) {}
+                console.log('[logout] Response data:', data);
+                localStorage.removeItem('api_token');
+                localStorage.removeItem('user');
+                window.location.href = '/login';
             })
             .catch(error => {
-                console.error('Logout error:', error);
+                console.error('[logout] Error:', error);
                 localStorage.removeItem('api_token');
                 localStorage.removeItem('user');
                 window.location.href = '/login';

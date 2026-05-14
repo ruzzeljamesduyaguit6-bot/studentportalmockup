@@ -6,6 +6,52 @@
     <title id="pageTitle">User Management - Role Based System</title>
     <link rel="icon" href="/images/bright-futures-logo.png">
     <x-vite-assets :assets="['resources/css/app.css', 'resources/css/views.css', 'resources/js/app.js', 'resources/js/user-management-loader.js']" />
+    <style>
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#f5f5f5;display:flex;flex-direction:column;min-height:100vh}
+        .navbar{display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:60px;background:#fff;border-bottom:1px solid #e0e0e0;box-shadow:0 2px 4px rgba(0,0,0,.06);position:sticky;top:0;z-index:100}
+        .navbar-title{display:flex;align-items:center;gap:10px;font-size:1.1rem;font-weight:700;color:#333}
+        .navbar-logo{height:36px;width:36px;object-fit:contain}
+        .navbar-actions{display:flex;align-items:center;gap:12px}
+        .user-info{display:flex;align-items:center;gap:8px;font-size:.9rem;color:#555}
+        .user-badge{width:32px;height:32px;border-radius:50%;background:#667eea;color:#fff;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700}
+        .logout-btn{padding:6px 14px;background:#e53e3e;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:.85rem}
+        .page-wrapper{display:flex;flex:1}
+        .sidebar{width:250px;background:linear-gradient(180deg,#f8f9fa 0%,#f0f1f3 100%);border-right:1px solid #ddd;padding:20px 0;overflow-y:auto;display:flex;flex-direction:column}
+        .sidebar-brand{padding:0 20px 20px;font-weight:700;color:#333;font-size:1rem}
+        .nav-item{display:flex;align-items:center;gap:10px;padding:10px 20px;color:#555;text-decoration:none;font-size:.9rem;transition:background .2s}
+        .nav-item:hover,.nav-item.active{background:#e8eaf6;color:#3949ab}
+        .nav-icon{font-size:1.1rem}
+        .main-container{flex:1;padding:24px;overflow-y:auto}
+        .container{max-width:1100px;margin:0 auto}
+        .hidden{display:none!important}
+        .users-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+        .users-header h2{font-size:1.3rem;font-weight:700;color:#222}
+        .users-header-actions{display:flex;gap:8px}
+        .add-user-btn{padding:8px 16px;background:#667eea;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:.9rem;font-weight:600}
+        .action-btn{padding:6px 12px;background:#f0f0f0;color:#333;border:1px solid #ddd;border-radius:6px;cursor:pointer;font-size:.85rem}
+        .action-btn:disabled{opacity:.5;cursor:not-allowed}
+        .search-bar{margin-bottom:12px}
+        .search-bar input{width:100%;padding:10px 14px;border:1px solid #ddd;border-radius:8px;font-size:.9rem}
+        .users-table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+        .users-table th{background:#f8f9fa;padding:12px 14px;text-align:left;font-size:.85rem;font-weight:600;color:#555;border-bottom:1px solid #e0e0e0}
+        .users-table td{padding:12px 14px;font-size:.9rem;color:#333;border-bottom:1px solid #f0f0f0}
+        .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:1000}
+        .modal-card{background:#fff;border-radius:12px;padding:24px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto}
+        .modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+        .modal-header h3{font-size:1.1rem;font-weight:700}
+        .modal-close{background:none;border:none;font-size:1.4rem;cursor:pointer;color:#888}
+        .modal-form .form-field{margin-bottom:14px}
+        .modal-form label{display:block;font-size:.85rem;font-weight:600;color:#444;margin-bottom:4px}
+        .modal-form input,.modal-form select{width:100%;padding:9px 12px;border:1px solid #ddd;border-radius:6px;font-size:.9rem}
+        .modal-grid.two-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+        .modal-grid.one-col{display:grid;grid-template-columns:1fr;gap:12px}
+        .modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+        .conditional-fields.hidden{display:none}
+        .role-filter-bar{display:flex;gap:8px;margin-bottom:12px}
+        .pagination-wrap{display:flex;align-items:center;gap:12px;margin-top:16px;justify-content:center}
+        .pagination-info{font-size:.85rem;color:#666}
+    </style>
 </head>
 <body>
     <div class="navbar" id="navbar">

@@ -51,8 +51,15 @@ RUN npm run build
 RUN composer run-script post-autoload-dump || true
 
 # Set correct permissions
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+RUN chown -R www-data:www-data \
+        /var/www/html/storage \
+        /var/www/html/bootstrap/cache \
+        /var/www/html/public \
+    && chmod -R 775 \
+        /var/www/html/storage \
+        /var/www/html/bootstrap/cache \
+    && chmod -R 755 \
+        /var/www/html/public
 
 # Copy Nginx configuration
 COPY docker/nginx.conf /etc/nginx/nginx.conf

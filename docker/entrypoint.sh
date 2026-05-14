@@ -1,10 +1,20 @@
 #!/bin/sh
 set -e
 
-# Run Laravel bootstrap tasks
+echo "[entrypoint] Starting Laravel bootstrap..."
+
+# Generate app key if not already set
+php artisan key:generate --no-interaction --force 2>/dev/null || true
+
+# Cache configuration, routes, and views for production performance
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
+
+# Ensure the storage symlink exists (public/storage -> storage/app/public)
+php artisan storage:link --no-interaction 2>/dev/null || true
+
+# Run database migrations (idempotent — safe to run on every boot)
 php artisan migrate --force
 echo "Seeding database..."
 if ! php artisan db:seed --force --verbose; then
