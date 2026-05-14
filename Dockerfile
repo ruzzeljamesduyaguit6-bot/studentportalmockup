@@ -29,17 +29,16 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
         opcache
 
 # Set correct permissions
-RUN mkdir -p storage/logs storage/framework/cache storage/framework/sessions storage/framework/views bootstrap/cache \
+RUN mkdir -p storage/logs storage/framework/cache storage/framework/sessions storage/framework/views bootstrap/cache public \
     && chown -R www-data:www-data \
-    /var/www/html/storage \
-    /var/www/html/bootstrap/cache \
-    /var/www/html/public \
+        /var/www/html/storage \
+        /var/www/html/bootstrap/cache \
+        /var/www/html/public \
     && chmod -R 775 \
-    /var/www/html/storage \
-    /var/www/html/bootstrap/cache \
+        /var/www/html/storage \
+        /var/www/html/bootstrap/cache \
     && chmod -R 755 \
-    /var/www/html/public
-
+        /var/www/html/public
     
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
