@@ -16,17 +16,12 @@ php artisan storage:link --no-interaction 2>/dev/null || true
 
 # Run database migrations (idempotent — safe to run on every boot)
 php artisan migrate --force
-
-# Seed only when the users table is empty (first-boot only)
-USER_COUNT=$(php artisan tinker --no-interaction --execute="echo \App\Models\User::count();" 2>/dev/null | tail -1 | tr -d '[:space:]')
-if [ "$USER_COUNT" = "0" ] || [ -z "$USER_COUNT" ]; then
-    echo "[entrypoint] Empty database detected — running seeders..."
-    php artisan db:seed --force
-else
-    echo "[entrypoint] Database already seeded (${USER_COUNT} users found) — skipping."
+echo "Seeding database..."
+if ! php artisan db:seed --force --verbose; then
+    echo "ERROR: Database seeding failed. See output above." >&2
+    exit 1
 fi
-
-echo "[entrypoint] Bootstrap complete. Starting Supervisor..."
+echo "Database seeding completed successfully."
 
 # Start Supervisor (manages PHP-FPM + Nginx)
 exec supervisord -c /etc/supervisor/conf.d/supervisord.conf
